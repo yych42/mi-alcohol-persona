@@ -52,26 +52,72 @@ def create_pipeline(templates_dir: str) -> Pipeline:
 
         background_sketch = TextGeneration(
             name="background-sketch",
-            llm=AnthropicLLM(
-                model="claude-3-5-sonnet-20241022",
-                api_key=os.getenv("ANTHROPIC_API_KEY"),
+            # llm=AnthropicLLM(
+            #     model="claude-3-5-sonnet-20241022",
+            #     api_key=os.getenv("ANTHROPIC_API_KEY"),
+            #     generation_kwargs={
+            #         "temperature": 0.9,
+            #         "max_tokens": 4096,
+            #     },
+            # ),
+            # llm=OpenAILLM(
+            #     model="accounts/fireworks/models/llama-v3p1-405b-instruct",
+            #     api_key="fw_3ZSVALruRmUPCkDcb389ehZj",
+            #     base_url="https://api.fireworks.ai/inference/v1",
+            # ),
+            llm=OpenAILLM(
+                model="gpt-4o",
+                api_key=os.getenv("OPENAI_API_KEY"),
                 generation_kwargs={
                     "temperature": 0.9,
-                    "max_tokens": 4096,
+                    "max_new_tokens": 4096,
                 },
             ),
             template=load_template(templates_dir, "background-sketch"),
             columns=["persona"],
-            output_mappings={"generation": "yaml_raw"},
+            output_mappings={"generation": "background_sketch_raw"},
         )
 
         background_sketch_yaml_extraction = YamlExtractorStep(
-            input_mappings={"text": "yaml_raw"},
-            output_mappings={"extracted_yaml": "background sketch"},
+            input_mappings={"text": "background_sketch_raw"},
+            output_mappings={"extracted_yaml": "background_sketch"},
+        )
+
+        alcohol_profile = TextGeneration(
+            name="alcohol-profile",
+            # llm=AnthropicLLM(
+            #     model="claude-3-5-sonnet-20241022",
+            #     api_key=os.getenv("ANTHROPIC_API_KEY"),
+            #     generation_kwargs={
+            #         "temperature": 0.9,
+            #         "max_tokens": 4096,
+            #     },
+            # ),
+            # llm=OpenAILLM(
+            #     model="accounts/fireworks/models/llama-v3p1-405b-instruct",
+            #     api_key="fw_3ZSVALruRmUPCkDcb389ehZj",
+            #     base_url="https://api.fireworks.ai/inference/v1",
+            # ),
+            llm=OpenAILLM(
+                model="gpt-4o",
+                api_key=os.getenv("OPENAI_API_KEY"),
+                generation_kwargs={
+                    "temperature": 0.9,
+                    "max_new_tokens": 4096,
+                },
+            ),
+            template=load_template(templates_dir, "alcohol-profile"),
+            columns=["persona", "background_sketch"],
+            output_mappings={"generation": "alcohol_profile_raw"},
+        )
+
+        alcohol_profile_yaml_extraction = YamlExtractorStep(
+            input_mappings={"text": "alcohol_profile_raw"},
+            output_mappings={"extracted_yaml": "alcohol_profile"},
         )
 
         keep_columns = KeepColumns(
-            columns=["persona", "background sketch"],
+            columns=["persona", "background_sketch", "alcohol_profile"],
             use_cache=False,
         )
 
@@ -79,6 +125,8 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             load_dataset
             >> background_sketch
             >> background_sketch_yaml_extraction
+            >> alcohol_profile
+            >> alcohol_profile_yaml_extraction
             >> keep_columns
         )
 

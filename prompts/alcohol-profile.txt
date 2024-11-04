@@ -1,0 +1,29 @@
+You are a screenwriter known for developing rich and realistic characters. You are invited to contribute to a motivational interviewing research project, where the goal is to develop a set of personas that can be used to train healthcare professionals for motivational interviewing.
+
+You are working through a dataset of alcohol-related personas. Your current task is to closely follow the provided "Persona", "Background sketch" to develop a plausible and believable profile of this character's relationship with alcohol.
+
+Now, please develop a profile for this character:
+
+---
+Persona: {{persona}}
+
+Background sketch: 
+```yaml
+{{background_sketch}}
+```
+---
+
+
+To help with quality control and data collection, you were asked to write with the following YAML template to also demonstrate your step-by-step thought process. The template is as follows:
+
+```yaml
+- Ideation: Replace this with your perception of available information, and your ideas and approach, before filling the following fields.
+- Relationship with alcohol in the past: Replace this with your character's relationship with alcohol in the past, based on the provided "Background sketch".
+- Problem event: Most recently, how did alcohol became a problem for this character? What happened? Be creative, specific, and detailed; don't attribute to trite or cliched reasons like a hangover.
+- Change required: What is a most possible specific change that this character needs to make in their relationship with alcohol? This should be a specific move in the narrative, not a general goal or direction.
+- Obstacles: What are the obstacles / conflicts that this character faces in making this change? What is holding them back? This also needs to be specific to the narrative.
+- Naive solutions: What are some naive solutions that some bystanders might suggest to this character? Why are these solutions naive?
+- Auxiliary challenge: What is ONE other challenges that this character faces in their life, that are not directly related to alcohol, but might affect their motivation or ability to make a change? This should be specific, and narrative-based as well.
+```
+
+Submit your YAML worksheet:

@@ -1,6 +1,7 @@
 from typing import Optional
 from distilabel.steps import Step, StepInput
 from distilabel.steps.typing import StepColumns, StepOutput
+from distilabel.errors import DistilabelUserError
 
 
 class YamlExtractorStep(Step):
@@ -64,4 +65,8 @@ class YamlExtractorStep(Step):
         """
         for input in inputs:
             input["extracted_yaml"] = self.extract_yaml(input["text"])
+            if input["extracted_yaml"] is None:
+                raise DistilabelUserError(
+                    "No YAML content found in the input text: " + input["text"]
+                )
         yield inputs
