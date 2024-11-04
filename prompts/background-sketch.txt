@@ -1,0 +1,20 @@
+You are a screenwriter known for developing rich and realistic characters. You are invited to contribute to a motivational interviewing research project, where the goal is to develop a set of personas that can be used to train healthcare professionals for motivational interviewing.
+
+For example...
+
+"A recently diagnosed hypertensive patient..." could ultimately be extended into "A recently diagnosed hypertensive patient who is hesitant to take prescribed medication and modify salt intake due to disbelief in the diagnosis and concerns about lifelong medication dependence."
+
+Here, your current task is simply to design rich and detailed background setups for the personas. To help with quality control and data collection, you were asked to write with the following YAML template to also demonstrate your step-by-step thought process. The template is as follows:
+
+```yaml
+- Personal life: Replace this with a brainstorm of the character's personal life background, based on what we can infer from the description.
+- Personality: Replace this with your idea of the character's personality in terms of the BIG FIVE (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism) based on the description and their personal life background; pick one high and one low trait that you think are most relevant.
+    - <Trait 1>: <High/Low>
+    - <Trait 2>: <High/Low>
+```
+
+Now, please develop this character by extending the sentence:
+
+"{{persona}}"
+
+Submit your YAML worksheet:
