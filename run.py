@@ -4,7 +4,7 @@ from distilabel.pipeline import Pipeline
 from distilabel.steps import KeepColumns, LoadDataFromHub
 from distilabel.steps.tasks import TextGeneration
 from dotenv import load_dotenv
-from steps.quote_extractor import QuoteExtractorStep
+from steps.yaml_extractor import YamlExtractorStep
 
 load_dotenv()
 
@@ -18,56 +18,64 @@ with Pipeline(  #
         split="train",
         config="persona",
         output_mappings={"persona": "persona"},
-        num_examples=20,
+        num_examples=3,
     )
 
-    background_development = TextGeneration(
+    background_sketch = TextGeneration(
         llm=AnthropicLLM(
             model="claude-3-5-sonnet-20241022",
             api_key=os.getenv("ANTHROPIC_API_KEY"),
+            generation_kwargs={
+                "temperature": 0.9,
+                "max_tokens": 4096,
+            },
         ),
-        template="""You are a screenwriter known for developing rich and realistic characters. Here, your task is to extend a character's description by imagining an unique personal problem they could possibly face, how they could resolve it, the motivation for them to commit to the change they need to resolve it, but also what's holding them back.
-
-For example...
+        template="""You are a screenwriter known for developing rich and realistic characters."""
+        """You are invited to contribute to a motivational interviewing research project, where the goal is to develop a set of personas that can be used to train healthcare professionals for motivational interviewing."""
+        """For example...
 
 "A recently diagnosed hypertensive patient..."
 
-Could be extended into "A recently diagnosed hypertensive patient who is hesitant to take prescribed medication and modify salt intake due to disbelief in the diagnosis and concerns about lifelong medication dependence."
+Could ultimately be extended into "A recently diagnosed hypertensive patient who is hesitant to take prescribed medication and modify salt intake due to disbelief in the diagnosis and concerns about lifelong medication dependence.\""""
+        """Here, your current task is simply to design rich and detailed background setups for the personas."""
+        """To help with quality control and data collection, you were asked to write with the following YAML template to also demonstrate your step-by-step thought process. The template is as follows:
+
+```yaml
+- Personal life: Replace this with a brainstorm of the character's personal life background, based on what we can infer from the description.
+- Personality: Replace this with your idea of the character's personality in terms of the BIG FIVE (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism) based on the description and their personal life background; pick one high and one low trait that you think are most relevant.
+    - <Trait 1>: <High/Low>
+    - <Trait 2>: <High/Low>
+```
 
 Now, please develop this character by extending the sentence:
 
 "{{persona}}"
 
-The extended description in a single sentence:""",
+Submit your YAML worksheet:""",
         columns=["persona"],
-        output_mappings={"generation": "extended_persona_raw"},
+        output_mappings={"generation": "yaml_raw"},
     )
 
-    persona_extraction = QuoteExtractorStep(
-        input_mappings={"text": "extended_persona_raw"},
-        output_mappings={"extracted_quote": "change_persona"},
+    background_sketch_yaml_extraction = YamlExtractorStep(
+        input_mappings={"text": "yaml_raw"},
+        output_mappings={"extracted_yaml": "background sketch"},
+    )
+
+    keep_columns = KeepColumns(  #
+        columns=["persona", "background sketch"],
         use_cache=False,
     )
 
-    keep = KeepColumns(  #
-        columns=["persona", "extended_persona_raw", "change_persona"],
-        use_cache=False,
+    (
+        load_dataset
+        >> background_sketch
+        >> background_sketch_yaml_extraction
+        >> keep_columns
     )
-
-    load_dataset >> text_generation >> persona_extraction >> keep
 
 if __name__ == "__main__":
     distiset = pipeline.run(  #
-        # use_cache=False,
-        parameters={
-            text_generation.name: {
-                "llm": {
-                    "generation_kwargs": {
-                        "temperature": 0.9,
-                    }
-                }
-            },
-        },
+        use_cache=False,
     )
     distiset.push_to_hub(
         "ychen/mi-alcohol-persona-dev",
