@@ -24,7 +24,7 @@ To help with quality control and data collection, you were asked to write with t
 <Replace this with your character's relationship with alcohol in the past, based on the provided "Background sketch" and the extended background.>
 
 ## Problem event
-<Most recently, how did alcohol became a problem for this character? What happened? Be creative, specific, and detailed; don't attribute to trite or cliched reasons like a hangover. #EVENT_INS#.>
+<Most recently, how did alcohol became a problem for this character? What happened? Be creative, specific, and detailed; don't attribute to trite or cliched reasons like a hangover. {{problem_event_suffix}}>
 
 ## Change required
 <What is a most possible specific change that this character needs to make in their relationship with alcohol? This should be a specific move in the narrative, not a general goal or direction.>

@@ -5,6 +5,7 @@ from distilabel.steps import KeepColumns, LoadDataFromHub
 from distilabel.steps.tasks import TextGeneration
 from dotenv import load_dotenv
 from steps.md_extractor import MarkdownExtractorStep
+from steps.randomize import RandomizeProblemEventSuffixStep
 
 
 def load_template(templates_dir: str, task_name: str) -> str:
@@ -75,10 +76,12 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             output_mappings={"generation": "background_sketch_raw"},
         )
 
-        background_sketch_yaml_extraction = MarkdownExtractorStep(
+        background_sketch_md_extraction = MarkdownExtractorStep(
             input_mappings={"text": "background_sketch_raw"},
             output_mappings={"extracted_markdown": "background_sketch"},
         )
+
+        randomize_problem_event_suffix = RandomizeProblemEventSuffixStep()
 
         alcohol_profile = TextGeneration(
             name="alcohol-profile",
@@ -93,11 +96,11 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             ),
             input_batch_size=3,
             template=load_template(templates_dir, "alcohol-profile"),
-            columns=["persona", "background_sketch"],
+            columns=["persona", "background_sketch", "problem_event_suffix"],
             output_mappings={"generation": "alcohol_profile_raw"},
         )
 
-        alcohol_profile_yaml_extraction = MarkdownExtractorStep(
+        alcohol_profile_md_extraction = MarkdownExtractorStep(
             input_mappings={"text": "alcohol_profile_raw"},
             output_mappings={"extracted_markdown": "alcohol_profile"},
         )
@@ -110,9 +113,10 @@ def create_pipeline(templates_dir: str) -> Pipeline:
         (
             load_dataset
             >> background_sketch
-            >> background_sketch_yaml_extraction
+            >> background_sketch_md_extraction
+            >> randomize_problem_event_suffix
             >> alcohol_profile
-            >> alcohol_profile_yaml_extraction
+            >> alcohol_profile_md_extraction
             >> keep_columns
         )
 
