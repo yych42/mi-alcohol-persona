@@ -4,7 +4,7 @@ from distilabel.pipeline import Pipeline
 from distilabel.steps import KeepColumns, LoadDataFromHub
 from distilabel.steps.tasks import TextGeneration
 from dotenv import load_dotenv
-from steps.yaml_extractor import YamlExtractorStep
+from steps.md_extractor import MarkdownExtractorStep
 
 
 def load_template(templates_dir: str, task_name: str) -> str:
@@ -75,9 +75,9 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             output_mappings={"generation": "background_sketch_raw"},
         )
 
-        background_sketch_yaml_extraction = YamlExtractorStep(
+        background_sketch_yaml_extraction = MarkdownExtractorStep(
             input_mappings={"text": "background_sketch_raw"},
-            output_mappings={"extracted_yaml": "background_sketch"},
+            output_mappings={"extracted_markdown": "background_sketch"},
         )
 
         alcohol_profile = TextGeneration(
@@ -97,9 +97,9 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             output_mappings={"generation": "alcohol_profile_raw"},
         )
 
-        alcohol_profile_yaml_extraction = YamlExtractorStep(
+        alcohol_profile_yaml_extraction = MarkdownExtractorStep(
             input_mappings={"text": "alcohol_profile_raw"},
-            output_mappings={"extracted_yaml": "alcohol_profile"},
+            output_mappings={"extracted_markdown": "alcohol_profile"},
         )
 
         keep_columns = KeepColumns(
