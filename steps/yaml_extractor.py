@@ -66,7 +66,5 @@ class YamlExtractorStep(Step):
         for input in inputs:
             input["extracted_yaml"] = self.extract_yaml(input["text"])
             if input["extracted_yaml"] is None:
-                raise DistilabelUserError(
-                    "No YAML content found in the input text: " + input["text"]
-                )
+                input["extracted_yaml"] = ""
         yield inputs

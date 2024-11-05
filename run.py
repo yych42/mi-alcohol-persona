@@ -47,7 +47,7 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             split="train",
             config="persona",
             output_mappings={"persona": "persona"},
-            num_examples=3,
+            num_examples=10,
         )
 
         background_sketch = TextGeneration(
@@ -60,19 +60,16 @@ def create_pipeline(templates_dir: str) -> Pipeline:
             #         "max_tokens": 4096,
             #     },
             # ),
-            # llm=OpenAILLM(
-            #     model="accounts/fireworks/models/llama-v3p1-405b-instruct",
-            #     api_key="fw_3ZSVALruRmUPCkDcb389ehZj",
-            #     base_url="https://api.fireworks.ai/inference/v1",
-            # ),
             llm=OpenAILLM(
-                model="gpt-4o",
-                api_key=os.getenv("OPENAI_API_KEY"),
+                model="anthropic:claude-3-5-sonnet-20241022",
+                api_key=os.getenv("OPENPIPE_API_KEY"),
+                base_url="https://api.openpipe.ai/api/v1",
                 generation_kwargs={
                     "temperature": 0.9,
                     "max_new_tokens": 4096,
                 },
             ),
+            input_batch_size=3,
             template=load_template(templates_dir, "background-sketch"),
             columns=["persona"],
             output_mappings={"generation": "background_sketch_raw"},
@@ -85,27 +82,16 @@ def create_pipeline(templates_dir: str) -> Pipeline:
 
         alcohol_profile = TextGeneration(
             name="alcohol-profile",
-            # llm=AnthropicLLM(
-            #     model="claude-3-5-sonnet-20241022",
-            #     api_key=os.getenv("ANTHROPIC_API_KEY"),
-            #     generation_kwargs={
-            #         "temperature": 0.9,
-            #         "max_tokens": 4096,
-            #     },
-            # ),
-            # llm=OpenAILLM(
-            #     model="accounts/fireworks/models/llama-v3p1-405b-instruct",
-            #     api_key="fw_3ZSVALruRmUPCkDcb389ehZj",
-            #     base_url="https://api.fireworks.ai/inference/v1",
-            # ),
             llm=OpenAILLM(
-                model="gpt-4o",
-                api_key=os.getenv("OPENAI_API_KEY"),
+                model="anthropic:claude-3-5-sonnet-20241022",
+                api_key=os.getenv("OPENPIPE_API_KEY"),
+                base_url="https://api.openpipe.ai/api/v1",
                 generation_kwargs={
                     "temperature": 0.9,
                     "max_new_tokens": 4096,
                 },
             ),
+            input_batch_size=3,
             template=load_template(templates_dir, "alcohol-profile"),
             columns=["persona", "background_sketch"],
             output_mappings={"generation": "alcohol_profile_raw"},

@@ -17,8 +17,8 @@ Background sketch:
 To help with quality control and data collection, you were asked to write with the following YAML template to also demonstrate your step-by-step thought process. The template is as follows:
 
 ```yaml
-- Ideation: Replace this with your perception of available information, and your ideas and approach, before filling the following fields.
-- Relationship with alcohol in the past: Replace this with your character's relationship with alcohol in the past, based on the provided "Background sketch".
+- Exteded background: Replace this with an extended background of this character, based on the provided "Background sketch", but adding more details and context that are specific to this character, yet go deeper than the sketch to create a more vivid picture of the character's life without being too limited to their persona. 
+- Relationship with alcohol in the past: Replace this with your character's relationship with alcohol in the past, based on the provided "Background sketch" and the extended background. 
 - Problem event: Most recently, how did alcohol became a problem for this character? What happened? Be creative, specific, and detailed; don't attribute to trite or cliched reasons like a hangover.
 - Change required: What is a most possible specific change that this character needs to make in their relationship with alcohol? This should be a specific move in the narrative, not a general goal or direction.
 - Obstacles: What are the obstacles / conflicts that this character faces in making this change? What is holding them back? This also needs to be specific to the narrative.
