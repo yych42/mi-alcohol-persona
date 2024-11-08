@@ -66,7 +66,7 @@ Submit your markdown worksheet---be sure to include the ```markdown ``` wrapper 
 SUFFIXES = [
     "",
     "Use at least 3 different details from the extended background.",
-    "Use at least many details from the extended background as possible.",
+    "Use at many details from the extended background as possible.",
     "Use at least 2 different aspects from the extended background.",
     "Narrow-in on one unique aspect in the extended background.",
     "Build on one specific detail in the extended background.",
@@ -127,8 +127,6 @@ class ProfileGeneration(Task):
     def _prepare_message_content(self, input: Dict[str, Any]) -> "ChatType":
         """Prepares the content for the template and returns the formatted messages."""
         fields = {column: input[column] for column in self.columns}
-        suffix = random.choice(SUFFIXES)
-        print(f"Suffix: {suffix}")
         fields.update(
             {
                 "problem_event_suffix": random.choice(SUFFIXES),
